@@ -9,8 +9,9 @@ HEURISTICS = {
     'piece_count': get_heuristic('piece_count'),
     'greedy':      get_heuristic('greedy')
 }
-DEPTHS    = [1, 2, 3, 4, 5]
-NUM_GAMES = 10
+DEPTHS = [1, 2, 3, 4, 5]
+
+NUM_GAMES = 50
 
 os.makedirs('charts',  exist_ok=True)
 os.makedirs('results', exist_ok=True)
@@ -24,6 +25,7 @@ save_benchmark()
 benchmark = load_benchmark()
 
 # Step 3 — Run all experiment configurations
+# Total: 2 heuristics x 5 depths x 50 games = 500 simulated games
 print("\n=== Step 2: Running Experiment Configurations ===")
 for h_name, h_fn in HEURISTICS.items():
     for d in DEPTHS:
