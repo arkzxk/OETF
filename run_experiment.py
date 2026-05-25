@@ -9,16 +9,17 @@ HEURISTICS = {
     'piece_count': get_heuristic('piece_count'),
     'greedy':      get_heuristic('greedy')
 }
-DEPTHS = [1, 2, 3, 4, 5]
-
+DEPTHS    = [1, 2, 3, 4, 5]
 NUM_GAMES = 50
+
+BENCHMARK_GAMES = 20
 
 os.makedirs('charts',  exist_ok=True)
 os.makedirs('results', exist_ok=True)
 
 # Step 1 — Generate and save benchmark dataset
 print("=== Step 1: Generating Benchmark Dataset ===")
-generate_benchmark(num_games=20, sample_every=5)
+generate_benchmark(num_games=BENCHMARK_GAMES, sample_every=5)
 save_benchmark()
 
 # Step 2 — Load benchmark for use during measurement
@@ -32,12 +33,14 @@ for h_name, h_fn in HEURISTICS.items():
         logger = Logger(h_name, d)
         print(f"Running: {h_name} | depth {d} | {NUM_GAMES} games...")
         for game_num in range(NUM_GAMES):
+            benchmark_game_num = game_num % BENCHMARK_GAMES
+
             run_measured_game(
                 depth=d,
                 heuristic_fn=h_fn,
                 h_name=h_name,
                 logger=logger,
-                game_num=game_num,
+                game_num=benchmark_game_num,
                 benchmark=benchmark
             )
         logger.save()
