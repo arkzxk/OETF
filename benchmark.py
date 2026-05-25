@@ -14,16 +14,32 @@ def get_game_phase(turn):
         return 'endgame'
 
 def exhaustive_optimal(state, depth=5):
+    from alpha_beta import alpha_beta
+    import alpha_beta as ab_module
+
     moves = get_legal_moves(state)
     if not moves:
         return None, None
-    best_mv, best_sc = None, float('-inf')
-    for mv in moves:
-        sim = simulate(state, mv)
-        sc  = sim.scores[state.active]
-        if sc > best_sc:
-            best_sc, best_mv = sc, mv
-    return best_mv, best_sc
+
+    piece_count = get_heuristic('piece_count')
+    score_before = state.scores[state.active]
+
+    ab_module.nodes_expanded = 0
+    _, best_mv = alpha_beta(
+        state, depth,
+        float('-inf'), float('inf'),
+        True, state.active, piece_count
+    )
+
+    if best_mv is None:
+        return None, None
+
+    sim = simulate(state, best_mv)
+    score_gained = sim.scores[state.active] - score_before
+
+    best_mv_serialized = [list(sq) for sq in best_mv]
+
+    return best_mv_serialized, round(score_gained, 4)
 
 def serialize_board(state):
     out = []
@@ -52,7 +68,7 @@ def generate_benchmark(num_games=20, sample_every=5):
             if not moves or turn > 500:
                 break
             if turn % sample_every == 0:
-                opt_mv, opt_sc = exhaustive_optimal(state)
+                opt_mv, opt_sc = exhaustive_optimal(state, depth=5)
                 if opt_mv is not None:
                     benchmark.append({
                         'game':          game_num,
