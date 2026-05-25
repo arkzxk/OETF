@@ -3,7 +3,7 @@ from move_generator import get_legal_moves
 from alpha_beta import alpha_beta, nodes_expanded as _ne
 import alpha_beta as ab_module
 
-MAX_TURNS = 500  # FIX: guard against infinite no-capture games
+MAX_TURNS = 500
 
 def select_move(state, depth, heuristic):
     ab_module.nodes_expanded = 0
