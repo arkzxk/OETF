@@ -27,7 +27,7 @@ class GUILogger:
         active_name = f"RED ({self.p1_name})" if state.active == 0 else f"BLUE ({self.p2_name})"
         print(f"Move {self.move_num} | {active_name} played {move}")
         
-        time.sleep(0.75)
+        time.sleep(0.5)
         
         board_state_str = ""
         for r in range(8):
