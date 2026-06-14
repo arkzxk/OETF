@@ -18,7 +18,7 @@ class DaMathGUI:
         self.canvas.pack(padx=20, pady=20)
         
         self.end_button = tk.Button(self.root, text="End Simulation", command=self.stop_code, 
-                                    bg="#d9534f", fg="white", font=("Arial", 12, "bold"))
+                                    bg="#d9534f", fg="white", font=("Arial", 12, "bold"), state=tk.DISABLED)
         self.end_button.pack(pady=10)
         
         self.root.protocol("WM_DELETE_WINDOW", self.stop_code)
@@ -32,12 +32,12 @@ class DaMathGUI:
     def update_board(self, state, move_num, nodes, time_ms, p1_name, p2_name):
         self.canvas.delete("all")
         
-        player_names = [p1_name, p2_name]
+        player_names = [f"RED ({p1_name})", f"BLUE ({p2_name})"]
         active_player = player_names[state.active]
         
         status = (f"Turn: {state.turn} | Move: {move_num} | Active: {active_player}\n"
-                  f"P1 ({p1_name}): {state.scores[0]:.2f}  |  P2 ({p2_name}): {state.scores[1]:.2f}\n"
-                  f"Compute: {nodes} nodes in {time_ms:.2f}ms")
+                  f"P1 (RED - {p1_name}): {state.scores[0]:.2f}  |  P2 (BLUE - {p2_name}): {state.scores[1]:.2f}\n"
+                  f"Compute: {nodes} nodes in {time_ms}ms")
         self.info_label.config(text=status)
 
         for r in range(8):
